@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>فرم درخواست اتوماسیون</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اتوچنل | فرم درخواست</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 0;
+      padding: 20px;
       font-family: 'Tahoma', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -18,94 +23,317 @@
     .form-container {
       background: rgba(255, 255, 255, 0.95);
       padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      width: 400px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 420px;
       text-align: center;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      font-size: 50px;
+      margin-bottom: 10px;
     }
 
     h2 {
       margin-bottom: 25px;
       color: #333;
-      font-size: 24px;
+      font-size: 22px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      text-align: right;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-size: 13px;
+      font-weight: bold;
     }
 
     input, textarea {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      padding: 14px;
+      border-radius: 10px;
+      border: 2px solid #e0e0e0;
       font-size: 14px;
+      font-family: 'Tahoma', sans-serif;
       outline: none;
       transition: 0.3s;
+      direction: rtl;
     }
 
     input:focus, textarea:focus {
-      border-color: #6c63ff;
-      box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+      border-color: #667eea;
+      box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+    }
+
+    input.error, textarea.error {
+      border-color: #e74c3c;
+      background: #fff5f5;
+    }
+
+    input.success, textarea.success {
+      border-color: #27ae60;
+      background: #f0fff4;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 11px;
+      margin-top: 5px;
+      display: none;
+      text-align: right;
     }
 
     button {
       width: 100%;
-      padding: 12px;
-      background-color: #6c63ff;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 16px;
+      font-family: 'Tahoma', sans-serif;
       cursor: pointer;
       transition: 0.3s;
+      margin-top: 10px;
     }
 
-    button:hover {
-      background-color: #5750d4;
+    button:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    button:disabled {
+      background: #a0a0a0;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .footer-text {
-      margin-top: 15px;
+      margin-top: 20px;
       font-size: 12px;
-      color: #666;
+      color: #888;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert-success {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      color: #155724;
+    }
+
+    .alert-error {
+      background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+      color: #721c24;
+    }
+
+    .brand {
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .optional {
+      color: #888;
+      font-weight: normal;
+      font-size: 11px;
     }
   </style>
 </head>
 <body>
   <div class="form-container">
-    <h2>فرم درخواست اتوماسیون</h2>
-    <form id="automationForm" enctype="multipart/form-data">
-      <input type="text" name="firstName" placeholder="نام" required>
-      <input type="text" name="lastName" placeholder="نام خانوادگی" required>
-      <input type="email" name="email" placeholder="ایمیل" required>
-      <input type="tel" name="phone" placeholder="شماره تماس" required>
-      <textarea name="message" placeholder="پیام شما" rows="4" required></textarea>
-      <input type="file" name="fileUpload" accept="image/*,application/pdf" required>
-      <button type="submit">ارسال</button>
+    <div class="logo">🚀</div>
+    <h2>فرم درخواست <span class="brand">اتوچنل</span></h2>
+    
+    <div class="alert alert-success" id="successMsg">
+      ✅ درخواست شما با موفقیت ثبت شد. کارشناسان ما در اسرع وقت با شما تماس می‌گیرند.
+    </div>
+    
+    <div class="alert alert-error" id="errorMsg">
+      ❌ خطا در ارسال. لطفاً دوباره تلاش کنید.
+    </div>
+
+    <form id="autoForm" novalidate>
+      <div class="form-group">
+        <label for="firstName">نام *</label>
+        <input type="text" id="firstName" name="firstName" placeholder="نام خود را وارد کنید">
+        <div class="error-message" id="firstNameError">لطفاً نام خود را وارد کنید</div>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">نام خانوادگی *</label>
+        <input type="text" id="lastName" name="lastName" placeholder="نام خانوادگی خود را وارد کنید">
+        <div class="error-message" id="lastNameError">لطفاً نام خانوادگی را وارد کنید</div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">شماره موبایل *</label>
+        <input type="tel" id="phone" name="phone" placeholder="09123456789" dir="ltr" style="text-align: left;" maxlength="11">
+        <div class="error-message" id="phoneError">شماره ۱۱ رقمی با 09 شروع شود</div>
+      </div>
+
+      <div class="form-group">
+        <label for="message">توضیحات *</label>
+        <textarea id="message" name="message" placeholder="درخواست خود را شرح دهید..." rows="4"></textarea>
+        <div class="error-message" id="messageError">توضیحات را وارد کنید</div>
+      </div>
+
+      <div class="form-group">
+        <label for="channel">آدرس کانال <span class="optional">(اختیاری - اگر کانال دارید)</span></label>
+        <input type="text" id="channel" name="channel" placeholder="@YourChannel" dir="ltr" style="text-align: left;">
+      </div>
+
+      <button type="submit" id="submitBtn">
+        <span id="btnText">ارسال درخواست</span>
+        <span id="btnLoading" class="loading" style="display: none;"></span>
+      </button>
     </form>
-    <div class="footer-text">تمام اطلاعات شما محفوظ است.</div>
+    
+    <div class="footer-text">🔒 اطلاعات شما محفوظ است</div>
   </div>
 
   <script>
-    const webhookURL = "https://34710-i6zm7.s3.irann8n.com/webhook-test/public-form"; // جایگزین کن
+    // ⚠️ آدرس webhook خود را اینجا قرار دهید
+    const WEBHOOK_URL = 'https://34710-i6zm7.s3.irann8n.com/webhook-test/public-form';
 
-    document.getElementById("automationForm").addEventListener("submit", async (e) => {
+    const form = document.getElementById("autoForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const btnText = document.getElementById("btnText");
+    const btnLoading = document.getElementById("btnLoading");
+    const successMsg = document.getElementById("successMsg");
+    const errorMsg = document.getElementById("errorMsg");
+
+    const patterns = {
+      phone: /^09[0-9]{9}$/,
+      name: /^.{2,}$/
+    };
+
+    function validateField(field, pattern = null) {
+      const value = field.value.trim();
+      const errorEl = document.getElementById(field.id + "Error");
+      let isValid = value.length > 0;
+      if (isValid && pattern) isValid = pattern.test(value);
+      
+      field.classList.toggle("error", !isValid);
+      field.classList.toggle("success", isValid);
+      if (errorEl) errorEl.style.display = isValid ? "none" : "block";
+      return isValid;
+    }
+
+    function validateForm() {
+      return [
+        validateField(document.getElementById("firstName"), patterns.name),
+        validateField(document.getElementById("lastName"), patterns.name),
+        validateField(document.getElementById("phone"), patterns.phone),
+        validateField(document.getElementById("message"))
+      ].every(r => r);
+    }
+
+    // اعتبارسنجی لحظه‌ای
+    document.getElementById("firstName").addEventListener("input", e => validateField(e.target, patterns.name));
+    document.getElementById("lastName").addEventListener("input", e => validateField(e.target, patterns.name));
+    document.getElementById("phone").addEventListener("input", e => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+      validateField(e.target, patterns.phone);
+    });
+    document.getElementById("message").addEventListener("input", e => validateField(e.target));
+
+    function setLoading(loading) {
+      submitBtn.disabled = loading;
+      btnText.style.display = loading ? "none" : "inline";
+      btnLoading.style.display = loading ? "inline-block" : "none";
+    }
+
+    function showAlert(type) {
+      successMsg.style.display = type === 'success' ? 'block' : 'none';
+      errorMsg.style.display = type === 'error' ? 'block' : 'none';
+      setTimeout(() => {
+        successMsg.style.display = 'none';
+        errorMsg.style.display = 'none';
+      }, 15000);
+    }
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      successMsg.style.display = 'none';
+      errorMsg.style.display = 'none';
 
-      const form = e.target;
-      const formData = new FormData(form);
+      if (!validateForm()) return;
+      if (!navigator.onLine) {
+        alert("اینترنت متصل نیست!");
+        return;
+      }
+
+      setLoading(true);
+
+      const formData = {
+        firstName: document.getElementById("firstName").value.trim(),
+        lastName: document.getElementById("lastName").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        message: document.getElementById("message").value.trim(),
+        channel: document.getElementById("channel").value.trim(),
+        timestamp: new Date().toISOString()
+      };
 
       try {
-        await fetch(webhookURL, {
+        const response = await fetch(WEBHOOK_URL, {
           method: "POST",
-          body: formData
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+          mode: "cors"
         });
-        alert("اطلاعات و فایل شما با موفقیت ارسال شد!");
-        form.reset();
+
+        if (response.ok) {
+          showAlert('success');
+          form.reset();
+          document.querySelectorAll("input, textarea").forEach(el => {
+            el.classList.remove("success", "error");
+          });
+        } else {
+          throw new Error("Server Error");
+        }
       } catch (error) {
-        alert("ارسال اطلاعات با خطا مواجه شد. لطفاً دوباره تلاش کنید.");
-        console.error(error);
+        console.error("Error:", error);
+        showAlert('error');
+      } finally {
+        setLoading(false);
       }
     });
   </script>
 </body>
 </html>
-
